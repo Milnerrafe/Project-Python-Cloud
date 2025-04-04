@@ -2,6 +2,10 @@ from flask import Flask, render_template, redirect, url_for, request, send_from_
 import subprocess
 import random
 import string
+import sqlite3
+import uuid
+from server_db import make, read, right, list
+
 
 def listcomponenthtml(name, status, link):
     f_name = name
@@ -30,7 +34,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    server_ids = list.serverdb()
+    def listhtmx(servers):
+        return(f'''<div hx-post="/listcomponent/{servers}" hx-swap="outerHTML" hx-trigger="load every 2s"></div>''')
+
+    return render_template('index.html', server_ids=server_ids, listhtmx=listhtmx)
 
 
 @app.route('/servercom/<name>/<status>/<link>', methods=['POST','GET'])
@@ -38,20 +46,11 @@ def flaskservercom(name, status, link):
     return listcomponenthtml(name, status, link)
 
 
-var1 = int(0)
 
-
-@app.route('/listcomponent', methods=['POST','GET'])
+@app.route('/listcomponent/<server-id>', methods=['POST','GET'])
 def listcomponent():
-    global var1
-    var1 += 1
 
-    name = "test"
-
-    if var1 % 2:
-        status = "true"
-    else:
-        status = "false"
+    status, name, config = read.serverdb(server_id)
 
     link = ""
 
