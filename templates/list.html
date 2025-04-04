@@ -1,0 +1,9 @@
+<div
+    hx-post="/list"
+    hx-trigger="ever 10s"
+    hx-swap="outerHTML"
+    class="w-auto h-[716.65px] overflow-y-auto w-auto h-[716.65px] border-2 border-black rounded-[30px] overflow-hidden"
+>
+    {% for servers in server_ids %} {{ listcomponenthtml(servers) | safe }} {%
+    endfor %}
+</div>

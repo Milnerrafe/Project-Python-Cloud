@@ -14,7 +14,7 @@ if not conn_string:
 
 # Initialize the database
 def _initialize_db():
- #Initialize the database connection and create tables if they don't exist
+    """Initialize the database connection and create tables if they don't exist"""
     try:
         with psycopg2.connect(conn_string) as conn:
             with conn.cursor() as cur:
@@ -49,6 +49,15 @@ _initialize_db()
 class read:
     @staticmethod
     def serverdb(identifier):
+        """
+        Read server details by ID or name.
+
+        Args:
+            identifier: Server ID (int) or name (str)
+
+        Returns:
+            Tuple of (status, name, config_file) if server exists, None otherwise
+        """
         try:
             with psycopg2.connect(conn_string) as conn:
                 with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -72,6 +81,18 @@ class read:
 class right:
     @staticmethod
     def serverdb(identifier, status=None, name=None, config_file=None):
+        """
+        Update server details by ID or name.
+
+        Args:
+            identifier: Server ID (int) or name (str)
+            status: New status (optional)
+            name: New name (optional)
+            config_file: New config file (optional)
+
+        Returns:
+            Updated server ID if successful, None otherwise
+        """
         try:
             with psycopg2.connect(conn_string) as conn:
                 with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -110,6 +131,18 @@ class right:
 class make:
     @staticmethod
     def serverdb(status=None, name=None, config_file=None):
+        """
+        Create a new server entry.
+
+        Args:
+            status: Server status
+            name: Server name
+            config_file: Server configuration file
+
+        Returns:
+            Tuple of (status, name, config_file) and server ID if successful
+            None otherwise
+        """
         if not name or not status or config_file is None:
             print("Error: All parameters (status, name, config_file) are required")
             return None
@@ -138,7 +171,12 @@ class make:
 class list:
     @staticmethod
     def serverdb():
+        """
+        List all server IDs.
 
+        Returns:
+            List of server IDs
+        """
         try:
             with psycopg2.connect(conn_string) as conn:
                 with conn.cursor() as cur:

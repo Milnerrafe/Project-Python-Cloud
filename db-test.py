@@ -1,7 +1,8 @@
+# Import the functions directly from the module
+# Assuming the previous code is saved in a file named server_db.py
 from server_db import make, read, right, list
 
 def main():
-
     # Example 1: Create a new server
     print("Creating a new server...")
     server_data, server_id = make.serverdb(
@@ -57,16 +58,6 @@ def main():
     print("\nListing all server IDs...")
     all_ids = list.serverdb()
     print(f"All server IDs: {all_ids}")
-
-    # Example 8: Update by name instead of ID
-    print("\nUpdating server by name...")
-    updated_id = right.serverdb("backup-server", status="standby")
-    print(f"Updated server ID: {updated_id}")
-
-    # Read updated server data
-    status, name, config = read.serverdb("backup-server")
-    print(f"Server name: {name}")
-    print(f"New server status: {status}")
 
 if __name__ == "__main__":
     main()

@@ -2,12 +2,26 @@ from flask import Flask, render_template, redirect, url_for, request, send_from_
 import subprocess
 import random
 import string
-import sqlite3
 import uuid
 from server_db import make, read, right, list
 
 
-def listcomponenthtml(name, status, link):
+def listcomponenthtml(server_id):
+
+    sid = int(server_id)
+
+    dbresponse = read.serverdb(sid)
+
+    if dbresponse:
+        status, name, config = dbresponse
+    else:
+        status = "db error"
+        name = "db error"
+        config = "db error"
+        print(f"db error, server id {server_id}, sid {sid}.")
+
+    link = ""
+
     f_name = name
     action = link
 
@@ -34,22 +48,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    server_ids = list.serverdb()
-    def listhtmx(servers):
-        return(f'''<div hx-post="/listcomponent/{servers}" hx-swap="outerHTML" hx-trigger="load every 2s"></div>''')
+    return render_template('index.html')
 
-    return render_template('index.html', server_ids=server_ids, listhtmx=listhtmx)
+@app.route('/list', methods=['POST','GET'])
+def list_flask():
+    server_ids = list.serverdb()
+    return render_template('list.html', server_ids=server_ids, listcomponenthtml=listcomponenthtml)
 
 
 
 @app.route('/listcomponent/<server_id>', methods=['POST','GET'])
 def listcomponent(server_id):
-
-    status, name, config = read.serverdb(server_id)
-
-    link = ""
-
-    return listcomponenthtml(name, status, link)
+    return listcomponenthtml(server_id)
 
 
 @app.route('/htmx.js')
