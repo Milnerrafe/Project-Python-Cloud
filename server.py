@@ -41,14 +41,9 @@ def index():
     return render_template('index.html', server_ids=server_ids, listhtmx=listhtmx)
 
 
-@app.route('/servercom/<name>/<status>/<link>', methods=['POST','GET'])
-def flaskservercom(name, status, link):
-    return listcomponenthtml(name, status, link)
 
-
-
-@app.route('/listcomponent/<server-id>', methods=['POST','GET'])
-def listcomponent():
+@app.route('/listcomponent/<server_id>', methods=['POST','GET'])
+def listcomponent(server_id):
 
     status, name, config = read.serverdb(server_id)
 
