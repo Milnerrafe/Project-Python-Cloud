@@ -3,7 +3,7 @@ import subprocess
 import random
 import string
 
-def servercom(name, status, link):
+def listcomponenthtml(name, status, link):
     f_name = name
     action = link
 
@@ -15,7 +15,7 @@ def servercom(name, status, link):
         f_status_text = "offline"
 
 
-    with open('templates/servercom.txt', 'r') as file:
+    with open('templates/listcomponent.html', 'r') as file:
         fstring_content = file.read()
 
     # Use eval to format the F-string dynamically
@@ -35,7 +35,7 @@ def index():
 
 @app.route('/servercom/<name>/<status>/<link>', methods=['POST','GET'])
 def flaskservercom(name, status, link):
-    return servercom(name, status, link)
+    return listcomponenthtml(name, status, link)
 
 
 var1 = int(0)
@@ -55,7 +55,7 @@ def listcomponent():
 
     link = ""
 
-    return servercom(name, status, link)
+    return listcomponenthtml(name, status, link)
 
 
 @app.route('/htmx.js')
@@ -70,6 +70,11 @@ def get_jquery():
 @app.route('/index.js')
 def get_js():
     return send_from_directory('templates', 'index.js')
+
+
+@app.route('/tailwind.js')
+def get_tailwind():
+    return send_from_directory('templates', 'tailwind.js')
 
 
 if __name__ == "__main__":
