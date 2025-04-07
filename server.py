@@ -3,9 +3,9 @@ import subprocess
 import random
 import string
 import uuid
-from server_db import make, read, right, list
+from readorm import read, list
+from rightorm import right, make
 from components import listcomponenthtml, serverpagecomponenthtml
-
 
 app = Flask(__name__)
 
@@ -28,9 +28,9 @@ def listcomponent(server_id):
 @app.route('/serverpage/<server_id>', methods=['POST','GET'])
 def serverpage(server_id):
     if request.method == 'GET':
-        return 'This is a GET response'
+        return render_template('index.html', htmxgoesto=f"serverpage/{server_id}")
     elif request.method == 'POST':
-        return 'This is a POST response'
+        return serverpagecomponenthtml(server_id)
 
 
 @app.route('/htmx.js')

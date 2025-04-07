@@ -4,78 +4,13 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-# Global connection string
-conn_string = os.getenv('DATABASE_URL')
+conn_string = os.getenv('READ_DATABASE_URL')
 if not conn_string:
-    raise ValueError("DATABASE_URL environment variable not set")
+    raise ValueError("READ_DATABASE_URL environment variable not set")
 
-# Initialize the database
-def _initialize_db():
-    """Initialize the database connection and create tables if they don't exist"""
-    try:
-        with psycopg2.connect(conn_string) as conn:
-            with conn.cursor() as cur:
-                # Check if the servers table exists, if not create it
-                cur.execute("""
-                SELECT EXISTS (
-                    SELECT FROM information_schema.tables
-                    WHERE table_name = 'servers'
-                );
-                """)
-                table_exists = cur.fetchone()[0]
 
-                if not table_exists:
-                    # Create the servers table
-                    cur.execute("""
-                    CREATE TABLE servers (
-                        id SERIAL PRIMARY KEY,
-                        name VARCHAR(255) UNIQUE NOT NULL,
-                        status VARCHAR(50) NOT NULL,
-                        config_file JSONB NOT NULL
-                    );
-                    """)
-                    conn.commit()
-    except Exception as e:
-        print(f"Error initializing database: {e}")
-        raise
-
-# Initialize the database when the module is imported
-_initialize_db()
-
-# Read functions
-class read:
-    @staticmethod
-    def serverdb(identifier):
-        """
-        Read server details by ID or name.
-
-        Args:
-            identifier: Server ID (int) or name (str)
-
-        Returns:
-            Tuple of (status, name, config_file) if server exists, None otherwise
-        """
-        try:
-            with psycopg2.connect(conn_string) as conn:
-                with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                    if isinstance(identifier, int):
-                        # Search by ID
-                        cur.execute("SELECT * FROM servers WHERE id = %s", (identifier,))
-                    else:
-                        # Search by name
-                        cur.execute("SELECT * FROM servers WHERE name = %s", (identifier,))
-
-                    result = cur.fetchone()
-
-                    if result:
-                        return result["status"], result["name"], result["config_file"]
-                    return None
-        except Exception as e:
-            print(f"Error reading from database: {e}")
-            return None
 
 # Update functions
 class right:
@@ -127,6 +62,8 @@ class right:
             print(f"Error updating database: {e}")
             return None
 
+
+
 # Create functions
 class make:
     @staticmethod
@@ -166,24 +103,3 @@ class make:
         except Exception as e:
             print(f"Error creating server in database: {e}")
             return None
-
-# List functions
-class list:
-    @staticmethod
-    def serverdb():
-        """
-        List all server IDs.
-
-        Returns:
-            List of server IDs
-        """
-        try:
-            with psycopg2.connect(conn_string) as conn:
-                with conn.cursor() as cur:
-                    cur.execute("SELECT id FROM servers ORDER BY id")
-
-                    result = cur.fetchall()
-                    return [row[0] for row in result]
-        except Exception as e:
-            print(f"Error listing servers from database: {e}")
-            return []
