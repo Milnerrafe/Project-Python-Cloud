@@ -4,51 +4,14 @@ import random
 import string
 import uuid
 from server_db import make, read, right, list
-
-
-def listcomponenthtml(server_id):
-
-    sid = int(server_id)
-
-    dbresponse = read.serverdb(sid)
-
-    if dbresponse:
-        status, name, config = dbresponse
-    else:
-        status = "db error"
-        name = "db error"
-        config = "db error"
-        print(f"db error, server id {server_id}, sid {sid}.")
-
-    link = ""
-
-    f_name = name
-    action = link
-
-    if status == "true":
-        f_status_color = "#04B101"
-        f_status_text = "Online"
-    else:
-        f_status_color = "#B10004"
-        f_status_text = "offline"
-
-
-    with open('templates/listcomponent.html', 'r') as file:
-        fstring_content = file.read()
-
-    # Use eval to format the F-string dynamically
-    formatted_string = eval(f"f'''{fstring_content}'''")
-
-    html = formatted_string
-
-    return(html)
+from components import listcomponenthtml, serverpagecomponenthtml
 
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', htmxgoesto="list")
 
 @app.route('/list', methods=['POST','GET'])
 def list_flask():
@@ -57,9 +20,17 @@ def list_flask():
 
 
 
-@app.route('/listcomponent/<server_id>', methods=['POST','GET'])
+@app.route('/listcomponent/<server_id>', methods=['POST'])
 def listcomponent(server_id):
     return listcomponenthtml(server_id)
+
+
+@app.route('/serverpage/<server_id>', methods=['POST','GET'])
+def serverpage(server_id):
+    if request.method == 'GET':
+        return 'This is a GET response'
+    elif request.method == 'POST':
+        return 'This is a POST response'
 
 
 @app.route('/htmx.js')

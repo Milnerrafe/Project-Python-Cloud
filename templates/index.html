@@ -36,7 +36,8 @@
     <body class="flex items-center justify-center h-screen bg-gray-100">
         <div
             id="fade-me-in"
-            hx-post="/list"
+            id="list_div"
+            hx-post="/{{ htmxgoesto }}"
             hx-trigger="load"
             hx-swap="outerHTML"
             class="w-auto h-[716.65px] overflow-y-auto w-auto h-[716.65px] border-2 border-black rounded-[30px] overflow-hidden"

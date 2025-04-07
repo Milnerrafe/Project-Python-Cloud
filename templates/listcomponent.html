@@ -10,7 +10,7 @@
         <div style="display: flex; align-items: center; justify-content: center; width: 740px; height: 75px; gap: 187px;">
             <span style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 24px;">{f_name} — {f_status_text}</span>
         </div>
-        <button style="display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; padding: 0;" onclick=" actionv1("{action}");">
+        <button style="display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; padding: 0;" hx-target="list_div" hx-get="/serverpage/{server_id}" hx-replace-url="true>
         <svg width="75" height="75" viewBox="0 0 75 75" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="1" y="1" width="73" height="73" rx="29" fill="#FFD500" stroke="black" stroke-width="2"/>
         <mask id="mask0_6_805" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="18" y="17" width="40" height="40">
