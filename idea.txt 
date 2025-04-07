@@ -1,0 +1,1 @@
+Separating the front end on one Python server and the other Python server being the back end server that will run the scripts that need to be run based on the database treating it as a source of truth. When the client wants to stop a service from running, then it will set the database value to something and then the back end server will respond.
